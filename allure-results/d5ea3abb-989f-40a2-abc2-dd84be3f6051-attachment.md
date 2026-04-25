@@ -1,0 +1,81 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: cart.test.js >> Cart Functionality Tests >> Add item to cart and verify
+- Location: tests\cart.test.js:7:7
+
+# Error details
+
+```
+TypeError: productPage.searchItem is not a function
+```
+
+# Test source
+
+```ts
+  1  | import { test, expect } from '@playwright/test';
+  2  | import ProductPage from '../page-objects/ProductPage.js';
+  3  | import CartPage from '../page-objects/CartPage.js';
+  4  | 
+  5  | test.describe('Cart Functionality Tests', () => {
+  6  | 
+  7  |   test('Add item to cart and verify', async ({ page }) => {
+  8  |     const productPage = new ProductPage(page);
+  9  |     const cartPage = new CartPage(page);
+  10 | 
+  11 |     // Navigate to product and add to cart
+> 12 |     await productPage.searchItem('Samsung galaxy s6');
+     |                       ^ TypeError: productPage.searchItem is not a function
+  13 |     await productPage.addItemToCart('Samsung galaxy s6');
+  14 | 
+  15 |     // Go to cart and verify item
+  16 |     await cartPage.openCart();
+  17 |     await expect(cartPage.getCartItem('Samsung galaxy s6')).toBeVisible();
+  18 |   });
+  19 | 
+  20 |   test('Remove item from cart', async ({ page }) => {
+  21 |     const productPage = new ProductPage(page);
+  22 |     const cartPage = new CartPage(page);
+  23 | 
+  24 |     // Add item first
+  25 |     await productPage.searchItem('Nokia lumia 1520');
+  26 |     await productPage.addItemToCart('Nokia lumia 1520');
+  27 | 
+  28 |     // Remove item
+  29 |     await cartPage.openCart();
+  30 |     await cartPage.removeItem('Nokia lumia 1520');
+  31 | 
+  32 |     // Verify item is removed
+  33 |     await expect(cartPage.getCartItem('Nokia lumia 1520')).toHaveCount(0);
+  34 |   });
+  35 | 
+  36 |   test('Place order from cart', async ({ page }) => {
+  37 |     const productPage = new ProductPage(page);
+  38 |     const cartPage = new CartPage(page);
+  39 | 
+  40 |     // Add item
+  41 |     await productPage.searchItem('Sony vaio i5');
+  42 |     await productPage.addItemToCart('Sony vaio i5');
+  43 | 
+  44 |     // Place order
+  45 |     await cartPage.openCart();
+  46 |     await cartPage.placeOrder({
+  47 |       name: 'Test User',
+  48 |       country: 'India',
+  49 |       city: 'Delhi',
+  50 |       creditCard: '4111111111111111',
+  51 |       month: '04',
+  52 |       year: '2026'
+  53 |     });
+  54 | 
+  55 |     // Verify confirmation
+  56 |     await expect(page.locator('.sweet-alert')).toContainText('Thank you for your purchase!');
+  57 |   });
+  58 | 
+  59 | });
+```

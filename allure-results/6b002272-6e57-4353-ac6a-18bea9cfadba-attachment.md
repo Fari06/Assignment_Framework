@@ -1,0 +1,63 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: cart.test.js >> Cart Functionality Tests >> Remove item from cart
+- Location: tests\cart.test.js:18:7
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```
+
+```
+Error: page.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for locator('a:has-text("Nokia lumia 1520")')
+
+```
+
+# Test source
+
+```ts
+  1  | import CommonMethods from '../common/CommonMethods.js';
+  2  | 
+  3  | export default class ProductPage {
+  4  |   constructor(page) {
+  5  |     this.page = page;
+  6  |     this.common = new CommonMethods(page);
+  7  |   }
+  8  | 
+  9  |   async navigateToHome() {
+  10 |     await this.page.goto(process.env.E2E_BASE_URL);
+  11 |   }
+  12 | 
+  13 |   async searchItem(itemName) {
+  14 |     // Click product link by visible text
+> 15 |     await this.page.click(`a:has-text("${itemName}")`);
+     |                     ^ Error: page.click: Test timeout of 30000ms exceeded.
+  16 |   }
+  17 | 
+  18 |   async addItemToCart(itemName) {
+  19 |     // Open product detail page
+  20 |     await this.page.click(`a:has-text("${itemName}")`);
+  21 |     // Click Add to cart
+  22 |     await this.common.clickElement('a:has-text("Add to cart")');
+  23 |     await this.page.waitForTimeout(2000);
+  24 |     // Go back to home
+  25 |     await this.page.goBack();
+  26 |   }
+  27 | 
+  28 |   async searchAndAdd(itemName) {
+  29 |     await this.page.click(`a:has-text("${itemName}")`);
+  30 |     await this.common.clickElement('a:has-text("Add to cart")');
+  31 |     await this.page.waitForTimeout(2000);
+  32 |     await this.page.goBack();
+  33 |   }
+  34 | }
+```

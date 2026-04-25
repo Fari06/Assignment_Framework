@@ -1,0 +1,70 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: cart.test.js >> Cart Functionality Tests >> Add item to cart and verify
+- Location: tests\cart.test.js:6:7
+
+# Error details
+
+```
+TypeError: productPage.navigateToHome is not a function
+```
+
+# Test source
+
+```ts
+  1  | import { test, expect } from '@playwright/test';
+  2  | import ProductPage from '../page-objects/ProductPage.js';
+  3  | 
+  4  | test.describe('Cart Functionality Tests', () => {
+  5  | 
+  6  |   test('Add item to cart and verify', async ({ page }) => {
+  7  |     const productPage = new ProductPage(page);
+  8  | 
+> 9  |     await productPage.navigateToHome();
+     |                       ^ TypeError: productPage.navigateToHome is not a function
+  10 |     await productPage.addItemToCart('Samsung galaxy s6');
+  11 | 
+  12 |     await page.click('#cartur');
+  13 |     await expect(page.locator('td:has-text("Samsung galaxy s6")')).toBeVisible();
+  14 |   });
+  15 | 
+  16 |   test('Remove item from cart', async ({ page }) => {
+  17 |     const productPage = new ProductPage(page);
+  18 | 
+  19 |     await productPage.navigateToHome();
+  20 |     await productPage.addItemToCart('Nokia lumia 1520');
+  21 | 
+  22 |     await page.click('#cartur');
+  23 |     await page.click('text=Delete');
+  24 |     await expect(page.locator('td:has-text("Nokia lumia 1520")')).toHaveCount(0);
+  25 |   });
+  26 | 
+  27 |   test('Place order from cart', async ({ page }) => {
+  28 |     const productPage = new ProductPage(page);
+  29 | 
+  30 |     await productPage.navigateToHome();
+  31 |     await productPage.addItemToCart('Sony vaio i5');
+  32 | 
+  33 |     await page.click('#cartur');
+  34 |     await page.click('button:has-text("Place Order")');
+  35 | 
+  36 |     await page.fill('#name', 'Test User');
+  37 |     await page.fill('#country', 'India');
+  38 |     await page.fill('#city', 'Delhi');
+  39 |     await page.fill('#card', '1234567890123456');
+  40 |     await page.fill('#month', '04');
+  41 |     await page.fill('#year', '2026');
+  42 |     await page.click('button:has-text("Purchase")');
+  43 | 
+  44 |     await expect(page.locator('.sweet-alert')).toBeVisible();
+  45 |     await page.click('button:has-text("OK")');
+  46 |   });
+  47 | 
+  48 | });
+```

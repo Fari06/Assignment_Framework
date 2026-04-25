@@ -1,0 +1,23 @@
+{
+  "name": "js_framework_playwright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0",
+    "allure-commandline": "^2.38.1",
+    "allure-playwright": "^3.7.0",
+    "dotenv": "^17.3.1"
+  },
+  "dependencies": {
+    "csv-parse": "^6.2.1",
+    "csv-parser": "^3.2.0",
+    "jsonfile": "^6.2.0",
+    "xlsx": "^0.18.5"
+  }
+}

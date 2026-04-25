@@ -1,0 +1,134 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: cart.test.js >> Cart Functionality Tests >> Add item to cart and verify
+- Location: tests\cart.test.js:6:7
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```
+
+```
+Error: page.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for locator('a.hrefch:has-text("Samsung galaxy s6")')
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - text:             
+  - navigation [ref=e2]:
+    - link "PRODUCT STORE" [ref=e3] [cursor=pointer]:
+      - /url: index.html
+      - img [ref=e4]
+      - text: PRODUCT STORE
+    - list [ref=e6]:
+      - listitem [ref=e7]:
+        - link "Home (current)" [ref=e8] [cursor=pointer]:
+          - /url: index.html
+          - text: Home
+          - generic [ref=e9]: (current)
+      - listitem [ref=e10]:
+        - link "Contact" [ref=e11] [cursor=pointer]:
+          - /url: "#"
+      - listitem [ref=e12]:
+        - link "About us" [ref=e13] [cursor=pointer]:
+          - /url: "#"
+      - listitem [ref=e14]:
+        - link "Cart" [ref=e15] [cursor=pointer]:
+          - /url: cart.html
+      - listitem [ref=e16]:
+        - link "Log in" [ref=e17] [cursor=pointer]:
+          - /url: "#"
+      - listitem
+      - listitem
+      - listitem [ref=e18]:
+        - link "Sign up" [ref=e19] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=e21]:
+      - list [ref=e22]:
+        - listitem [ref=e23] [cursor=pointer]
+        - listitem [ref=e24] [cursor=pointer]
+        - listitem [ref=e25] [cursor=pointer]
+      - img "Third slide" [ref=e28]
+      - button "Previous" [ref=e29] [cursor=pointer]:
+        - generic [ref=e31]: Previous
+      - button "Next" [ref=e32] [cursor=pointer]:
+        - generic [ref=e34]: Next
+  - generic [ref=e36]:
+    - generic [ref=e38]:
+      - link "CATEGORIES" [ref=e39] [cursor=pointer]:
+        - /url: ""
+      - link "Phones" [ref=e40] [cursor=pointer]:
+        - /url: "#"
+      - link "Laptops" [ref=e41] [cursor=pointer]:
+        - /url: "#"
+      - link "Monitors" [ref=e42] [cursor=pointer]:
+        - /url: "#"
+    - list [ref=e45]:
+      - listitem [ref=e46]:
+        - button "Previous" [ref=e47]
+      - listitem [ref=e48]:
+        - button "Next" [ref=e49] [cursor=pointer]
+  - generic [ref=e51]:
+    - generic [ref=e54]:
+      - heading "About Us" [level=4] [ref=e55]
+      - paragraph [ref=e56]: We believe performance needs to be validated at every stage of the software development cycle and our open source compatible, massively scalable platform makes that a reality.
+    - generic [ref=e59]:
+      - heading "Get in Touch" [level=4] [ref=e60]
+      - paragraph [ref=e61]: "Address: 2390 El Camino Real"
+      - paragraph [ref=e62]: "Phone: +440 123456"
+      - paragraph [ref=e63]: "Email: demo@blazemeter.com"
+    - heading "PRODUCT STORE" [level=4] [ref=e67]:
+      - img [ref=e68]
+      - text: PRODUCT STORE
+  - contentinfo [ref=e69]:
+    - paragraph [ref=e70]: Copyright © Product Store
+```
+
+# Test source
+
+```ts
+  1  | import CommonMethods from '../common/CommonMethods.js';
+  2  | 
+  3  | export default class ProductPage {
+  4  |   constructor(page) {
+  5  |     this.page = page;
+  6  |     this.common = new CommonMethods(page);
+  7  |   }
+  8  | 
+  9  |   async navigateToHome() {
+  10 |     await this.page.goto(process.env.E2E_BASE_URL);
+  11 |   }
+  12 | 
+  13 |   async searchItem(itemName) {
+  14 |     // Correct selector for product links
+  15 |     await this.page.click(`a.hrefch:has-text("${itemName}")`);
+  16 |   }
+  17 | 
+  18 |   async addItemToCart(itemName) {
+> 19 |     await this.page.click(`a.hrefch:has-text("${itemName}")`);
+     |                     ^ Error: page.click: Test timeout of 30000ms exceeded.
+  20 |     await this.common.clickElement('a:has-text("Add to cart")');
+  21 |     await this.page.waitForTimeout(2000);
+  22 |     await this.page.goBack();
+  23 |   }
+  24 | 
+  25 |   async searchAndAdd(itemName) {
+  26 |     await this.page.click(`a.hrefch:has-text("${itemName}")`);
+  27 |     await this.common.clickElement('a:has-text("Add to cart")');
+  28 |     await this.page.waitForTimeout(2000);
+  29 |     await this.page.goBack();
+  30 |   }
+  31 | }
+```
